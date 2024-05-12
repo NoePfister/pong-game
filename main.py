@@ -24,13 +24,13 @@ class Game:
                         self.player2.move(1)
                     if event.key == pg.K_DOWN:
                         self.player2.move(-1)
-                    if event.key == pg.K_W:
+                    if event.key == pg.K_w:
                         self.player1.move(1)
-                    if event.key == pg.K_S:
+                    if event.key == pg.K_s:
                         self.player1.move(-1)
                     
                     
-
+            self.canvas.fill((0,0,0))
             self.player1.draw()
             self.player2.draw()
             pg.display.update()
@@ -43,23 +43,23 @@ class Player:
     def __init__(self,is_left: bool, screen):
         self.is_left=is_left
         self.screen = screen
-        self.pos = (0,0)
+        self.pos = [0,0]
         self.width = 10
         self.height = 100
         self.setup()
 
     def setup(self):
         if self.is_left:
-            self.pos = (0,(500-self.height)/2)
+            self.pos = [0,(500-self.height)/2]
         else:
-            self.pos = (1000-self.width,(500-self.height)/2)
+            self.pos = [1000-self.width,(500-self.height)/2]
 
     def draw(self):
         pg.draw.rect(self.screen, (255,255,255), (self.pos[0],self.pos[1],self.width,self.height))
 
 
     def move(self,y:int):
-        self.pos[1] += y
+        self.pos[1] += y*10
 
 def start():
     dimensions = (1000,500)
