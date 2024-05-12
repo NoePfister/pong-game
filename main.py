@@ -8,11 +8,13 @@ class Game:
         self.player1 = Player(True,self.canvas, self)
         self.player2 = Player(False, self.canvas, self)
         self.ball = Ball(self.canvas, self)
+        self.score = [0,0]
         self.loop()
 
 
     def setup(self):
         pg.init()
+        self.font = pg.font.Font("freesansbold.ttf", 32)
         self.canvas = pg.display.set_mode(self.dimensions)
         pg.display.set_caption("Pong")
 
@@ -45,15 +47,29 @@ class Game:
             self.player1.draw()
             self.player2.draw()
             self.ball.draw()
+            self.draw_score()
             pg.display.update()
 
-    def end(self):
-        print("Game Finished")
-        self.quit()
+    def update_score(self):
+        print("Score")
+        if self.ball.pos[0] > 500:
+            self.score[0] += 1
+        else:
+            self.score[1] += 1
+        self.ball.pos = [500,250]
+
+
+    def draw_score(self):
+        text = self.font.render(f'{self.score[0]}:{self.score[1]}',True,(225,225,225))
+        textRect = text.get_rect()
+        textRect.center = (500,10)
+
+        self.canvas.blit(text,textRect)
+
+    
 
     def quit(self):
-        pg.quit()
-
+        exit(0)
 
 
         
@@ -103,7 +119,7 @@ class Ball:
         self.setup()
 
     def setup(self):
-        self.velocity=[1,random.uniform(0,1)]
+        self.velocity=[1,random.uniform(-1,1)]
 
     def update(self):
         self.pos[1]+=self.velocity[1]/10
@@ -131,7 +147,7 @@ class Ball:
         # Check if Ball is out of Bounds.
         if(self.pos[0] < self.rad) or (self.pos[0] > 1000-self.rad):
             print("Out of bounds")
-            self.end()
+            self.score()
 
     def check_player_collison(self,player: Player):
         #Check if ball is traveling away from Player
@@ -146,8 +162,8 @@ class Ball:
         return True
             
 
-    def end(self):
-        self.game.end() 
+    def score(self):
+        self.game.update_score() 
 
 if __name__ == "__main__":
     start()
