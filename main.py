@@ -19,18 +19,26 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.quit() 
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_UP:
-                        self.player2.move(1)
-                    if event.key == pg.K_DOWN:
-                        self.player2.move(-1)
-                    if event.key == pg.K_w:
-                        self.player1.move(1)
-                    if event.key == pg.K_s:
-                        self.player1.move(-1)
+                # if event.type == pg.KEYDOWN:
+                #     if event.key == pg.K_UP:
+                #         self.player2.move(1)
+                #     if event.key == pg.K_DOWN:
+                #         self.player2.move(-1)
+                #     if event.key == pg.K_w:
+                #         self.player1.move(1)
+                #     if event.key == pg.K_s:
+                #         self.player1.move(-1)
                     
-                    
+            keys = pg.key.get_pressed()
+            if keys[pg.K_DOWN]: self.player2.move(1)
+            if keys[pg.K_UP]: self.player2.move(-1)
+            if keys[pg.K_s]: self.player1.move(1)
+            if keys[pg.K_w]: self.player1.move(-1)
+
+
+
             self.canvas.fill((0,0,0))
+            pg.draw.rect(self.canvas,(200,200,200),(500,0,10,500))
             self.player1.draw()
             self.player2.draw()
             pg.display.update()
@@ -59,8 +67,12 @@ class Player:
 
 
     def move(self,y:int):
-        self.pos[1] += y*10
+        if not self.check_bounds(self.pos[1]+y): return
+        self.pos[1] += y/5
 
+    def check_bounds(self, y: int):
+        if (y<0 or y>(500-self.height)):return False
+        return True
 def start():
     dimensions = (1000,500)
     game = Game(dimensions)
